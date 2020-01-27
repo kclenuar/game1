@@ -16,6 +16,8 @@ public class Game1 extends ApplicationAdapter {
 	Animation<AtlasRegion> animation;
 	
 	float time;
+	int x;
+	float t2 = 0;
 	
 	@Override
 	public void create () {
@@ -30,10 +32,17 @@ public class Game1 extends ApplicationAdapter {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		time += Gdx.graphics.getDeltaTime();
+		float d = Gdx.graphics.getDeltaTime();
+		time += d;
+		t2 += d;
+		if (t2 > 1/8f) {
+		    t2 = 0f;
+		    x += 1;
+		    x = x >= 200 ? 0 : x;
+		}
 		
 		batch.begin();
-		batch.draw(animation.getKeyFrame(time, true), 0, 0);
+		batch.draw(animation.getKeyFrame(time, true), x, 0);
 		batch.end();
 	}
 	
