@@ -2,6 +2,8 @@ package kclenuar.game1;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,6 +17,8 @@ public class Game1 extends ApplicationAdapter {
 	
 	Animation<AtlasRegion> animation;
 	
+	MouseInput mouse;
+	
 	float time;
 	int x;
 	float t2 = 0;
@@ -25,6 +29,9 @@ public class Game1 extends ApplicationAdapter {
 		
 		textureAtlas = new TextureAtlas(Gdx.files.internal("yellow-ball.atlas"));
 		animation = new Animation<>(1/8f, textureAtlas.getRegions());
+		
+		mouse = new MouseInput();
+		Gdx.input.setInputProcessor(mouse);
 	}
 
 	@Override
@@ -37,8 +44,8 @@ public class Game1 extends ApplicationAdapter {
 		t2 += d;
 		if (t2 > 1/8f) {
 		    t2 = 0f;
-		    x += 1;
-		    x = x >= 200 ? 0 : x;
+		    x += mouse.b ? 3 : 1; // speed up side movement if lmb is down
+		    x = x >= 300 ? 0 : x;
 		}
 		
 		batch.begin();
@@ -49,5 +56,26 @@ public class Game1 extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
+	}
+	
+	private class MouseInput extends InputAdapter {
+	    
+	    boolean b = false;
+	    
+	    @Override
+	    public boolean touchDown(int x, int y, int p, int button) {
+	        if (button == Buttons.LEFT) {
+	            b = true;
+	            return true;
+	        } else return false;
+	    }
+	    
+	    @Override
+	    public boolean touchUp(int x, int y, int p, int button) {
+	        if (button == Buttons.LEFT) {
+	            b = false;
+	            return true;
+	        } else return false;
+	    }
 	}
 }
