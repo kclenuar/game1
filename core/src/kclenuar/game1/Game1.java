@@ -3,6 +3,7 @@ package kclenuar.game1;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -61,6 +62,33 @@ public class Game1 extends ApplicationAdapter {
 	private class MouseInput extends InputAdapter {
 	    
 	    boolean b = false;
+	    
+	    //temporarily place window size in this class
+	    private int w, h;
+	    
+	    @Override
+	    public boolean keyDown(int keyCode) {
+	        boolean processed = false;
+	        
+	        // full screen button
+	        if (keyCode == Keys.F) {
+	            if (Gdx.graphics.isFullscreen()) {
+	                Gdx.graphics.setWindowedMode(w, h);
+	            } else {
+	                w = Gdx.graphics.getWidth();
+	                h = Gdx.graphics.getHeight();
+	                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+	            }
+	            processed = true;
+	        }
+	        // exit application button
+	        else if (keyCode == Keys.ESCAPE) {
+	            Gdx.app.exit();
+	            processed = true;
+	        }
+	        
+	        return processed;
+	    }
 	    
 	    @Override
 	    public boolean touchDown(int x, int y, int p, int button) {
